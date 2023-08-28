@@ -3,7 +3,6 @@ import torch
 from typing import Optional
 import warnings
 import numpy as np
-
 Tensor = torch.Tensor
 
 
@@ -381,14 +380,3 @@ class VariogramScore(nn.Module):
                 return torch.sum(score)
             else:
                 return torch.mean(score)
-
-
-if __name__ == "__main__":
-    pred = torch.randn(size=(32, 2, 100))
-    obs = torch.randn(size=(32, 2, 1))
-
-    es = VariogramScore()
-    test = es(obs, pred)
-    print(test.shape)
-    print(test)
-
