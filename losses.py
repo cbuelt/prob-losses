@@ -366,11 +366,10 @@ class VariogramScore(nn.Module):
 
         # Calculate terms
         term_1 = torch.pow(torch.abs(observation - torch.transpose(observation, 1, 2)), self.p)
-        exp_term = torch.mean(prediction, dim = 2, keepdim = True)
-        term_2 = torch.pow(torch.abs(exp_term - torch.transpose(exp_term, 1, 2)), self.p)
+        term_2 = torch.mean(torch.pow(torch.abs(torch.unsqueeze(prediction, dim = 1) - torch.unsqueeze(prediction, dim = 2)), self.p), dim = -1)
 
         #Calculate score
-        score = torch.sum(torch.pow(term_1 - term_2,2), dim = (1,2))       
+        score = torch.sum(torch.pow(term_1 - term_2, 2), dim = (1,2))       
 
 
         if not self.reduce:
