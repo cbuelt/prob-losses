@@ -27,13 +27,35 @@ The continuously ranked probability score (CRPS, Gneiting and Raftery (2007)) is
 
 For several parametric distributions closed form expressions of the CRPS are available and can be used to train a neural network, then called distributional neural network (DRN, Rasp and Lerch (2018)). The following are implemented here:
 #### Normal distribution (Gneiting et. al. (2005)):
-$$\mathrm{CRPS}(\mathcal{N}(\mu,\sigma^2),y) = \sigma \bigg\\{ \frac{y-\mu}{\sigma} \bigg[2 \Phi \bigg( \frac{y-\mu}{\sigma} \bigg)-1\bigg] + 2 \varphi \bigg(\frac{y-\mu}{\sigma}\bigg)- \frac{1}{\sqrt{\pi}} \bigg \\},$$ where $\Phi, \varphi$ are the CDF and PDF of a standard normal distribution.
+$$\mathrm{CRPS}\big(\mathcal{N}(\mu,\sigma^2),y\big) = \sigma \bigg\\{ \frac{y-\mu}{\sigma} \bigg[2 \Phi \bigg( \frac{y-\mu}{\sigma} \bigg)-1\bigg] + 2 \varphi \bigg(\frac{y-\mu}{\sigma}\bigg)- \frac{1}{\sqrt{\pi}} \bigg \\},$$ where $\Phi, \varphi$ are the CDF and PDF of a standard normal distribution.
 
 #### Truncated normal distribution (Gneiting and Thorarinsdottir (2010)):
-$$\mathrm{CRPS}(\mathcal{N}^0(\mu,\sigma^2),y) = $$
+$$
+\begin{align}
+\mathrm{CRPS}\big(\mathcal{N}^0(\mu,\sigma^2),y\big) & = \sigma \Phi \Big( \frac{\mu}{\sigma} \Big)^{-2} \bigg[ \frac{y-\mu}{\sigma} \Phi \Big( \frac{\mu}{\sigma} \Big) \bigg \\{ 2 \Phi \Big( \frac{y-\mu}{\sigma} \Big) + \Phi \Big( \frac{\mu}{\sigma} \Big) - 2 \bigg \\} \\
+& + 2 \varphi \Big( \frac{y-\mu}{\sigma} \Big) \Phi \Big( \frac{\mu}{\sigma} \Big) - \frac{1}{\sqrt{\pi}} \Phi \Big( \sqrt{2} \frac{\mu}{\sigma} \Big) \bigg ].
+\end{align}$$
 
 #### Log-normal distribution (Baran and Lerch (2015)):
 
+$$
+\begin{align}
+\mathrm{CRPS}\big(\log\mathcal{N}^0(\mu,\sigma^2),y\big) & = y \bigg[ 2 \Phi \Big( (\log(x)-\mu)/ \sigma \Big) - 1 \bigg ] \\
+& - 2e^{\mu + \sigma^2/2} \bigg[ \Phi \Big( (\log(y)-\mu)/ \sigma - \sigma \Big) + \Phi \Big( \sigma / \sqrt{2} \Big) - 1 \bigg].
+\end{align}$$
+
+Closed forms for more distributions are available, compare Zamo and Naveau (2018). Applications that include these scores as loss functions for neural networks include temperature (normal distribution), windspeed (log-normal distribution) or precipitation (truncated normal distribution).
+
+## Energy Score
+The energy score (Gneiting and Raftery (2007)) can be thought of as a multivariate extension of the CRPS.
+For some probability distribution $\mathbb{P}$ and a realized outcome $\boldsymbol{y}$, the energy score is given as:
+$$\mathrm{ES}(\mathbb{P}, \boldsymbol{y}) =  \mathbb{E} \\| \boldsymbol{X} - \boldsymbol{y} \\| - \frac{1}{2} \mathbb{E} \\| \boldsymbol{X} - \boldsymbol{X'} \\|,$$
+where $\boldsymbol{X}, \boldsymbol{X'}$ are independent copies of a random vector with distribution $\mathbb{P}$. The energy score has for example been used to forecast multivariate temperature fields.
+
+## Variogram Score
+The variogram score (Scheuerer and Hamill (2015)) is also a scoring rule used for multivariate data. For some probability distribution $\mathbb{P}$ and a realized outcome $\boldsymbol{y} \in \mathbb{R}^d$, the Variogram score of order $p$ is defined as:
+$$\mathrm{VS}(\mathbb{P},\boldsymbol{y}) =  \sum_{i,j=1}^d w_{ij} (|y_i - y_j|^p - \mathbb{E} | X_i - X_j |^p )^2,$$
+where $X_i, X_j$ are the *i*th and the *j* th component of a random vector $\boldsymbol{X}$ with distribution $\mathbb{P}$ and $w_{ij}$ are nonnegative weights.
 
 ## References
 - Gneiting, T. and A. E. Raftery (2007). Strictly proper scoring rules, prediction, and estimation. Journal of the American Statistical Association 102(477), 359-378.
@@ -41,3 +63,5 @@ $$\mathrm{CRPS}(\mathcal{N}^0(\mu,\sigma^2),y) = $$
 - Gneiting, T. et al., 2005: Calibrated Probabilistic Forecasting Using Ensemble Model Output Statistics and Minimum CRPS Estimation. Mon. Wea. Rev., 133, 1098–1118.
 - Gneiting, T., Thorarinsdottir, T. 2010: Probabilistic Forecasts of Wind Speed: Ensemble Model Output Statistics by using Heteroscedastic Censored Regression. Journal of the Royal Statistical Society Series A: Statistics in Society, Volume 173, Issue 2, Pages 371–388.
 - Baran S, Lerch S (2015): Log-normal distribution based ensemble model output statistics models for probabilistic wind-speed forecasting. Q J R Meteorol Soc 141:2289–2299.
+- Zamo, M., Naveau, P. Estimation of the Continuous Ranked Probability Score with Limited Information and Applications to Ensemble Weather Forecasts. Math Geosci 50, 209–234 (2018).
+- Scheuerer, M. and Hamill, T. M. (2015). Variogram-based proper scoring rules for probabilistic forecasts of multivariate quantities. Monthly Weather Review, 143, 1321–1334.
