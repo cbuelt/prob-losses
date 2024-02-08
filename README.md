@@ -54,7 +54,7 @@ where $\boldsymbol{X}, \boldsymbol{X'}$ are independent copies of a random vecto
 
 ## Variogram Score
 The variogram score (Scheuerer and Hamill (2015)) is also a scoring rule used for multivariate data. For some probability distribution $\mathbb{P}$ and a realized outcome $\boldsymbol{y} \in \mathbb{R}^d$, the Variogram score of order $p$ is defined as:
-$$\mathrm{VS}(\mathbb{P},\boldsymbol{y}) =  \sum_{i,j=1}^d w_{ij} (|y_i - y_j|^p - \mathbb{E} | X_i - X_j |^p )^2,$$
+$$\mathrm{VS}(\mathbb{P},\boldsymbol{y}) =  \sum_{i,j=1}^d w_{ij} \big(|y_i - y_j|^p - \mathbb{E} | X_i - X_j |^p \big)^2,$$
 where $X_i, X_j$ are the *i*th and the *j* th component of a random vector $\boldsymbol{X}$ with distribution $\mathbb{P}$ and $w_{ij}$ are nonnegative weights.
 
 ## References
